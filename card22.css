@@ -1,0 +1,19 @@
+body{
+font-family:Arial;
+text-align:center;
+background-color:#e3f2fd;
+padding:50px;
+}
+
+h1{color:#0277bd;}
+
+button{
+padding:10px 20px;
+margin:10px;
+border:none;
+border-radius:5px;
+background-color:#039be5;
+color:white;
+cursor:pointer;
+font-size:16px;
+}

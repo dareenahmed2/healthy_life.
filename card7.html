@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sleep Tips</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="card7.css">
+</head>
+<body>
+
+<h1>Sleep Tips 😴</h1>
+
+<img src="https://cdn-icons-png.flaticon.com/512/2891/2891913.png" width="120">
+
+<p id="tip">Click below for a sleep tip!</p>
+
+<label for="hours">How many hours did you sleep?</label><br>
+<input type="range" id="hours" min="0" max="12" value="8" oninput="updateHours(this.value)"><span id="hourValue">8</span> hrs<br>
+<button onclick="evaluateSleep()">Evaluate Sleep</button>
+
+<br><br>
+<a href="home.html"><button>Back</button></a>
+
+<script src="card7.js"></script>
+</body>
+</html>

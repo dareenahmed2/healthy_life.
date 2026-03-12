@@ -1,0 +1,32 @@
+body{
+font-family:Arial;
+text-align:center;
+background-color:#fff3e0;
+padding:50px;
+}
+
+h1{color:#e65100;}
+
+button{
+padding:10px 20px;
+margin:10px;
+border:none;
+border-radius:5px;
+background-color:#f57c00;
+color:white;
+cursor:pointer;
+font-size:16px;
+}
+
+#answers button{
+  display:block;
+  width:80%;
+  margin:5px auto;
+  background-color:#ffe0b2;
+  color:#e65100;
+}
+
+#feedback{
+  margin-top:15px;
+  font-weight:bold;
+}

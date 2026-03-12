@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Healthy Life</title>
+<link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="login-box">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png" class="logo">
+    <h1 id="welcome-msg">Welcome to Healthy Life 👋</h1>
+    <h2 id="tagline">Start your healthy adventure!</h2>
+
+    <input type="text" id="name" placeholder="Enter your name">
+    <p id="name-greeting"></p>
+    <input type="email" id="email" placeholder="Enter your email">
+    <input type="password" id="password" placeholder="Enter a password">
+    <small id="name-hint">Just your first name is enough 😊</small>
+
+    <button id="submitBtn" onclick="login()">Login / Register</button>
+    <p id="toggleText">Don't have an account? <a href="#" onclick="toggleMode(event)">Sign up</a></p>
+
+    <p id="error"></p>
+  </div>
+</div>
+
+<script src="login.js"></script>
+
+<footer class="site-footer">© Created by Dareen Ahmed</footer>
+</body>
+</html>

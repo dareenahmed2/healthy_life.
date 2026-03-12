@@ -1,0 +1,47 @@
+body{
+font-family:Arial;
+text-align:center;
+background-color:#e3f2fd;
+padding:50px;
+}
+
+h1{color:#0277bd;}
+
+#glasses{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.glass{
+  width:40px;
+  height:60px;
+  border:2px solid #0277bd;
+  border-bottom: none;
+  border-radius:0 0 10px 10px;
+  position:relative;
+  cursor:pointer;
+  transition:background 0.3s;
+}
+.glass.filled::after{
+  content:'';
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#0277bd;
+  opacity:0.6;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
+border:none;
+border-radius:5px;
+background-color:#039be5;
+color:white;
+cursor:pointer;
+font-size:16px;
+}

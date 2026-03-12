@@ -1,0 +1,28 @@
+body{
+font-family:Arial;
+text-align:center;
+background-color:#ede7f6;
+padding:50px;
+}
+
+h1{color:#512da8;}
+
+button{
+padding:10px 20px;
+margin:10px;
+border:none;
+border-radius:5px;
+background-color:#7e57c2;
+color:white;
+cursor:pointer;
+font-size:16px;
+}
+
+input[type=range]{
+  width:60%;
+  margin:10px 0;
+}
+
+#hourValue{
+  font-weight:bold;
+}

@@ -1,0 +1,13 @@
+body{
+font-family:Arial;
+text-align:center;
+background-color:#fff3e0;
+padding:50px;
+}
+
+h1{color:#e65100;}
+
+a{
+  color:#0277bd;
+  font-weight:bold;
+}

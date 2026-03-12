@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Healthy Life - The End</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4135/4135716.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="three-col">
+
+
+<div class="end-container">
+  <h1>🎉 After this course you will be healthy ever 🎉</h1>
+  <p>Thank you for following along – you're healthier and hopefully had some fun!</p>
+  <button id="restartBtn" class="nav-button" onclick="location.href='home.html'">Restart</button>
+</div>
+
+<!-- feedback widget -->
+<div id="feedback-widget">
+  <button id="feedback-btn">Feedback ⭐</button>
+  <div id="feedback-form">
+    <h3>Rate your experience</h3>
+    <div id="stars">
+      <span data-value="1">☆</span>
+      <span data-value="2">☆</span>
+      <span data-value="3">☆</span>
+      <span data-value="4">☆</span>
+      <span data-value="5">☆</span>
+    </div>
+    <textarea id="feedback-text" placeholder="Tell us what you think..."></textarea>
+    <button id="submit-feedback">Submit</button>
+    <button id="close-feedback">Cancel</button>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+// simple confetti animation: header/login elements have been removed so logic is simplified
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+let W = canvas.width = window.innerWidth;
+let H = canvas.height = window.innerHeight;
+const confetti = [];
+const colors = ['#ff0a54','#ff477e','#ff7096','#ff85a1','#fbb1bd','#f9bec7'];
+
+function rand(min,max){ return Math.random()*(max-min)+min; }
+
+function createPiece(){
+  return {
+    x: rand(0,W),
+    y: rand(-H,0),
+    r: rand(5,15),
+    d: rand(1,3),
+    color: colors[Math.floor(rand(0,colors.length))],
+    tilt: rand(-10,10),
+    tiltAngle: 0,
+    tiltAngleIncrement: rand(0.05,0.12)
+  };
+}
+
+for(let i=0;i<300;i++) confetti.push(createPiece());        
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  confetti.forEach(p=>{
+    ctx.beginPath();
+    ctx.lineWidth = p.r;
+    ctx.strokeStyle = p.color;
+    ctx.moveTo(p.x + p.tilt + p.r/2, p.y);
+    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2);
+    ctx.stroke();
+  });
+  update();
+}
+
+function update(){
+  confetti.forEach(p=>{
+    p.tiltAngle += p.tiltAngleIncrement;
+    p.y += (Math.cos(p.d)+3+p.r/2)/2;
+    p.tilt = Math.sin(p.tiltAngle) * 15;
+    if(p.y > H){
+      Object.assign(p, createPiece(), {y: -10});
+    }
+  });
+}
+
+function loop(){
+  draw();
+  requestAnimationFrame(loop);
+}
+
+window.addEventListener('resize',()=>{
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+});
+
+canvas.addEventListener('click', ()=>{ // spawn more
+  for(let i=0;i<50;i++) confetti.push(createPiece());
+});
+
+loop();
+
+// feedback widget logic
+const fbBtn = document.getElementById('feedback-btn');
+const fbForm = document.getElementById('feedback-form');
+const stars = document.querySelectorAll('#stars span');
+let selectedRating = 0;
+
+fbBtn.addEventListener('click', ()=>{
+  fbForm.style.display = fbForm.style.display === 'block' ? 'none' : 'block';
+});
+
+stars.forEach(span =>{
+  span.addEventListener('click', ()=>{
+    selectedRating = parseInt(span.dataset.value);
+    updateStars();
+  });
+});
+
+function updateStars(){
+  stars.forEach(s=>{
+    if(parseInt(s.dataset.value) <= selectedRating) s.classList.add('selected');
+    else s.classList.remove('selected');
+  });
+}
+
+document.getElementById('submit-feedback').addEventListener('click', ()=>{
+  const text = document.getElementById('feedback-text').value.trim();
+  if(selectedRating === 0){
+    alert('Please choose a star rating');
+    return;
+  }
+  const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+  feedbacks.push({rating:selectedRating, comment:text, date:new Date().toISOString()});
+  localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+  alert('Thank you for your feedback!');
+  fbForm.style.display = 'none';
+  selectedRating=0;
+  updateStars();
+  document.getElementById('feedback-text').value='';
+});
+
+document.getElementById('close-feedback').addEventListener('click', ()=>{
+  fbForm.style.display='none';
+});
+</script>
+
+<footer class="site-footer">© Created by Dareen Ahmed @ 2026</footer>
+</body>
+</html>

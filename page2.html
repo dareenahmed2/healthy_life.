@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Healthy Life - More</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4135/4135716.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="three-col">
+
+<header class="site-header">
+  <img src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png" class="site-logo" alt="logo">
+  <h1 id="welcome"></h1>
+  <button id="logoutBtn">Logout</button>
+</header>
+
+<div class="cards-container">
+
+  <div class="card" onclick="openPage('card11.html')">
+    <img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" width="100">
+    <h2>Stress Tips</h2>
+    <p>Learn how to manage stress.</p>
+  </div>
+
+  <div class="card" onclick="openPage('card12.html')">
+    <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" width="100">
+    <h2>Healthy Recipes 2</h2>
+    <p>More nutritious meal ideas.</p>
+  </div>
+
+  <div class="card" onclick="openPage('card13.html')">
+    <img src="https://cdn-icons-png.flaticon.com/512/860/860814.png" width="100">
+    <h2>Meditation</h2>
+    <p>Try a guided meditation session.</p>
+  </div>
+
+  <div class="card" onclick="openPage('card14.html')">
+    <img src="https://cdn-icons-png.flaticon.com/512/2913/2913817.png" width="100">
+    <h2>Outdoor Activities</h2>
+    <p>Fun things to do outside.</p>
+  </div>
+
+  <div class="card" onclick="openPage('card15.html')">
+    <img src="https://cdn-icons-png.flaticon.com/512/2965/2965272.png" width="100">
+    <h2>Dental Care</h2>
+    <p>Keep your teeth healthy.</p>
+  </div>
+
+  <div class="card" onclick="openPage('card16.html')">
+    <img src="https://cdn-icons-png.flaticon.com/512/2523/2523027.png" width="100">
+    <h2>Eye Health</h2>
+    <p>Tips for healthy vision.</p>
+  </div>
+
+</div>
+
+<button id="nextPage" class="nav-button" onclick="location.href='page3.html'">Next</button>
+<button id="prevPage" class="nav-button" onclick="location.href='home.html'">Back</button>
+
+<!-- feedback widget -->
+<div id="feedback-widget">
+  <button id="feedback-btn">Feedback ⭐</button>
+  <div id="feedback-form">
+    <h3>Rate your experience</h3>
+    <div id="stars">
+      <span data-value="1">☆</span>
+      <span data-value="2">☆</span>
+      <span data-value="3">☆</span>
+      <span data-value="4">☆</span>
+      <span data-value="5">☆</span>
+    </div>
+    <textarea id="feedback-text" placeholder="Tell us what you think..."></textarea>
+    <button id="submit-feedback">Submit</button>
+    <button id="close-feedback">Cancel</button>
+  </div>
+</div>
+
+<!-- modal used for interactive overlay -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// enforce login
+let storedUser = localStorage.getItem("user");
+if(!storedUser){
+  window.location.href = 'login.html';
+} else {
+  try{
+    const userObj = JSON.parse(storedUser);
+    document.getElementById("welcome").innerText="Welcome, "+userObj.name+" 👋";
+  }catch(e){
+    document.getElementById("welcome").innerText="Welcome!";
+  }
+}
+
+function openPage(page){
+  const body = document.body;
+  const spinner = document.createElement('div');
+  spinner.className = 'spinner';
+  body.appendChild(spinner);
+
+  fetch(page)
+    .then(r=>r.text())
+    .then(html=>{
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const modalBody = document.getElementById("modal-body");
+      modalBody.innerHTML = doc.body.innerHTML;
+      const scripts = doc.querySelectorAll('script');
+      scripts.forEach(oldScript=>{
+        const newScript = document.createElement('script');
+        if(oldScript.src){
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+        modalBody.appendChild(newScript);
+      });
+
+      document.getElementById("modal").classList.add('open');
+      document.getElementById("modal").style.display = "block";
+    })
+    .catch(err=>console.error(err))
+    .finally(()=>{ spinner.remove(); });
+}
+
+document.getElementById('logoutBtn').addEventListener('click',()=>{
+  localStorage.removeItem('user');
+  window.location.href='login.html';
+});
+
+function closeModal(){
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("modal-body").innerHTML = "";
+}
+
+// feedback widget logic
+const fbBtn = document.getElementById('feedback-btn');
+const fbForm = document.getElementById('feedback-form');
+const stars = document.querySelectorAll('#stars span');
+let selectedRating = 0;
+
+fbBtn.addEventListener('click', ()=>{
+  fbForm.style.display = fbForm.style.display === 'block' ? 'none' : 'block';
+});
+
+stars.forEach(span =>{
+  span.addEventListener('click', ()=>{
+    selectedRating = parseInt(span.dataset.value);
+    updateStars();
+  });
+});
+
+function updateStars(){
+  stars.forEach(s=>{
+    if(parseInt(s.dataset.value) <= selectedRating) s.classList.add('selected');
+    else s.classList.remove('selected');
+  });
+}
+
+document.getElementById('submit-feedback').addEventListener('click', ()=>{
+  const text = document.getElementById('feedback-text').value.trim();
+  if(selectedRating === 0){
+    alert('Please choose a star rating');
+    return;
+  }
+  const feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+  feedbacks.push({rating:selectedRating, comment:text, date:new Date().toISOString()});
+  localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+  alert('Thank you for your feedback!');
+  fbForm.style.display = 'none';
+  selectedRating=0;
+  updateStars();
+  document.getElementById('feedback-text').value='';
+});
+
+document.getElementById('close-feedback').addEventListener('click', ()=>{
+  fbForm.style.display='none';
+});
+</script>
+
+<footer class="site-footer">© Created by Dareen Ahmed</footer>
+</body>
+</html>
